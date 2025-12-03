@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MXlogo - Buni Logo Yako Papo Hapo</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" />
+    <style>
+        :root {
+            --primary: #00d4ff;
+            --secondary: #ff6bff;
+            --dark: #0f0f1a;
+            --light: #ffffff;
+            --gray: rgba(255, 255, 255, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            color: var(--light);
+            background: var(--dark);
+            overflow-x: hidden;
+        }
+
+        /* Navbar */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 1rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            transition: all 0.4s ease;
+            backdrop-filter: blur(10px);
+            background: rgba(15, 15, 26, 0.7);
+        }
+
+        .navbar.scrolled {
+            background: rgba(15, 15, 26, 0.95);
+            padding: 0.8rem 5%;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+        }
+
+        .nav-links a {
+            color: var(--light);
+            text-decoration: none;
+            font-weight: 500;
+            transition: 0.3s;
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -6px;
+            left: 50%;
+            background: var(--primary);
+            transition: 0.4s;
+            transform: translateX(-50%);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* Mobile Menu */
+        .menu-toggle {
+            display: none;
+            font-size: 1.8rem;
+            cursor: pointer;
+            color: var(--light);
+        }
+
+        /* Hero Section */
+        .header-container {
+            position: relative;
+            height: 100vh;
+            min-height: 600px;
+            overflow: hidden;
+        }
+
+        #dynamic-background {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .slide-item {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0;
+            transition: opacity 1.8s ease-in-out;
+        }
+
+        .slide-item.active {
+            opacity: 1;
+        }
+
+        .hero-overlay {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, rgba(15,15,26,0.7), rgba(15,15,26,0.95));
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 0 1.5rem;
+            z-index: 10;
+        }
+
+        .hero-overlay h1 {
+            font-size: 3.5rem;
+            font-weight: 900;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #fff, var(--primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            line-height: 1.2;
+        }
+
+        .hero-overlay p {
+            font-size: 1.3rem;
+            max-width: 700px;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+        a{
+            text-decoration: none;
+        }
+
+        #cta-button {
+            display: inline-block;
+            padding: 1rem 2.5rem;
+            background:transparent;
+            color:rgb(198, 218, 14);
+            font-weight: bold;
+            font-size: 1.2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            box-shadow: 0 10px 30px rgba(0, 212, 255, 0.4);
+            transition: all 0.4s ease;
+        }
+
+        #cta-button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 212, 255, 0.6);
+             background: linear-gradient(135deg, var(--primary), var(--secondary));
+        }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .hero-overlay h1 { font-size: 3rem; }
+            .hero-overlay p { font-size: 1.1rem; }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                position: fixed;
+                top: 70px;
+                left: -100%;
+                width: 100%;
+                height: 100vh;
+                background: rgba(15,15,26,0.98);
+                flex-direction: column;
+                align-items: center;
+                justify-content: flex-start;
+                padding-top: 4rem;
+                transition: 0.5s;
+            }
+
+            .nav-links.active {
+                left: 0;
+            }
+
+            .nav-links a {
+                font-size: 1.5rem;
+                margin: 1rem 0;
+            }
+
+            .menu-toggle {
+                display: block;
+            }
+
+            .hero-overlay h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero-overlay p {
+                font-size: 1.1rem;
+            }
+
+            #cta-button {
+                padding: 0.9rem 2rem;
+                font-size: 1.1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-overlay h1 {
+                font-size: 2.2rem;
+            }
+            .logo {
+                font-size: 1.5rem;
+            }
+        }
+        option{
+            color: var(--light);
+            background: rgb(73, 176, 194);
+        }
+    </style>
+    
+    <style>
+      /* Logo Form Section - Modern Dark-Neon Design */
+.container { max-width: 1200px; margin: 0 auto; padding: 0 1rem; }
+.form-wrapper { max-width: 900px; margin: 0 auto; background: rgba(20, 20, 40, 0.6); backdrop-filter: blur(20px); border-radius: 20px; padding: 3rem 2rem; border: 1px solid rgba(0, 212, 255, 0.2); box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5); }
+.form-title { font-size: 2.8rem; text-align: center; margin-bottom: 1rem; background: linear-gradient(135deg, #fff, var(--primary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.form-subtitle { text-align: center; opacity: 0.9; margin-bottom: 3rem; font-size: 1.1rem; }
+
+.form-grid { display: grid; grid-template-columns: 1fr; gap: 1.5rem; margin-bottom: 1.5rem; }
+.color-grid { grid-template-columns: 1fr 1fr; }
+
+.input-group label { display: block; margin-bottom: 0.5rem; font-weight: 600; color: #ccc; }
+.input-group input, .input-group select, .input-group textarea { 
+    width: 100%; padding: 1rem; background: rgba(255,255,255,0.05); border: 1px solid rgba(0,212,255,0.3); border-radius: 12px; color: white; font-size: 1rem; transition: all 0.3s;
+}
+.input-group input:focus, .input-group select:focus, .input-group textarea:focus { 
+    outline: none; border-color: var(--primary); box-shadow: 0 0 20px rgba(0,212,255,0.3); 
+}
+.input-group input::placeholder, .input-group textarea::placeholder { color: #777; }
+
+.style-options { display: flex; flex-wrap: wrap; gap: 0.8rem; margin-top: 0.5rem; }
+.style-btn { padding: 0.8rem 1.2rem; background: rgba(255,255,255,0.05); border: 1px solid rgba(0,212,255,0.3); color: #ccc; border-radius: 50px; cursor: pointer; transition: all 0.4s; font-size: 0.95rem; }
+.style-btn.active, .style-btn:hover { background: var(--primary); color: black; border-color: var(--primary); transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,212,255,0.4); }
+
+.color-preview { margin-top: 0.5rem; text-align: center; font-family: monospace; font-size: 0.9rem; color: #aaa; }
+
+.generate-btn { width: 100%; padding: 1.3rem; margin-top: 2rem; background: linear-gradient(135deg, var(--primary), var(--secondary)); border: none; border-radius: 50px; color: white; font-size: 1.3rem; font-weight: bold; cursor: pointer; transition: all 0.4s; display: flex; align-items: center; justify-content: center; gap: 1rem; }
+.generate-btn:hover { transform: translateY(-5px); box-shadow: 0 20px 40px rgba(0,212,255,0.5); }
+
+/* Result Area */
+.result-area { margin-top: 4rem; text-align: center; padding: 3rem; background: rgba(0,0,0,0.3); border-radius: 20px; border: 1px dashed rgba(0,212,255,0.4); }
+#svgContainer { width: 100%; min-height: 380px; background: white; border-radius: 16px; overflow: hidden; margin: 2rem 0; display: flex; align-items: center; justify-content: center; }
+#svgContainer .placeholder { color: #666; font-size: 1.4rem; }
+.result-actions { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+.primary-btn, .secondary-btn { padding: 1rem 2rem; border-radius: 50px; font-weight: bold; cursor: pointer; transition: all 0.3s; }
+.primary-btn { background: var(--primary); color: black; border: none; }
+.secondary-btn { background: transparent; color: var(--primary); border: 2px solid var(--primary); }
+.primary-btn:hover, .secondary-btn:hover { transform: translateY(-3px); box-shadow: 0 10px 30px rgba(0,212,255,0.4); }
+
+.required { color: #ff6bff; }
+
+/* Responsive */
+@media (min-width: 768px) {
+    .form-grid { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 480px) {
+    .form-wrapper { padding: 2rem 1rem; }
+    .form-title { font-size: 2.2rem; }
+    .result-actions { flex-direction: column; }
+}
+      
+    </style>
+    
+    <style>
+    /* PROFESSIONAL FOOTER - Dark Neon Style */
+.site-footer {
+    background: linear-gradient(to top, #0a0a14, #0f0f1a);
+    color: #ccc;
+    padding: 4rem 0 2rem;
+    border-top: 1px solid rgba(0, 212, 255, 0.2);
+    margin-top: 5rem;
+}
+
+.footer-grid {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr 1fr 1fr;
+    gap: 3rem;
+    margin-bottom: 3rem;
+}
+
+.footer-col h4 {
+    color: var(--primary);
+    margin-bottom: 1.5rem;
+    font-size: 1.2rem;
+    position: relative;
+}
+
+.footer-col h4::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -8px;
+    width: 50px;
+    height: 3px;
+    background: var(--primary);
+    border-radius: 3px;
+}
+
+.footer-col ul {
+    list-style: none;
+}
+
+.footer-col ul li {
+    margin-bottom: 0.8rem;
+}
+
+.footer-col ul li a {
+    color: #aaa;
+    text-decoration: none;
+    transition: all 0.3s;
+    display: inline-block;
+}
+
+.footer-col ul li a:hover {
+    color: var(--primary);
+    transform: translateX(5px);
+}
+
+.newsletter-form {
+    display: flex;
+    margin: 1rem 0;
+    gap: 0.5rem;
+}
+
+.newsletter-form input {
+    flex: 1;
+    padding: 0.8rem;
+    border: 1px solid rgba(0,212,255,0.3);
+    background: rgba(255,255,255,0.05);
+    border-radius: 8px;
+    color: white;
+}
+
+.newsletter-form button {
+    padding: 0.8rem 1.2rem;
+    background: var(--primary);
+    color: black;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.newsletter-form button:hover {
+    background: white;
+    transform: translateY(-3px);
+}
+
+/* Bottom Bar */
+.footer-bottom {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    gap: 1.5rem;
+}
+
+.social-links a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 45px;
+    height: 45px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(0,212,255,0.3);
+    border-radius: 50%;
+    color: #ccc;
+    font-size: 1.3rem;
+    margin: 0 0.5rem;
+    transition: all 0.4s;
+}
+
+.social-links a:hover {
+    background: var(--primary);
+    color: black;
+    transform: translateY(-8px) scale(1.1);
+    box-shadow: 0 10px 20px rgba(0,212,255,0.4);
+}
+
+.copyright {
+    font-size: 0.95rem;
+    opacity: 0.8;
+}
+
+.copyright a {
+    color: var(--primary);
+    text-decoration: none;
+}
+
+.heart {
+    color: #ff6bff;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.3); }
+}
+
+/* Responsive Footer */
+@media (max-width: 992px) {
+    .footer-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+    .brand-col {
+        grid-column: 1 / -1;
+        text-align: center;
+    }
+    .newsletter-form {
+        max-width: 400px;
+        margin: 1rem auto;
+    }
+}
+
+@media (max-width: 600px) {
+    .footer-grid {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+    .footer-col h4::after {
+        left: 50%;
+        transform: translateX(-50%);
+    }
+    .footer-bottom {
+        text-align: center;
+    }
+    .social-links a {
+        width: 50px;
+        height: 50px;
+        font-size: 1.5rem;
+    }
+}  
+      
+    </style>
+    
+</head>
+<body>
+
+    <div class="header-container">
+        <!-- Navbar -->
+        <nav class="navbar" id="navbar">
+            <div class="logo">MX logo </div>
+            <div class="menu-toggle" id="mobile-menu">
+                <i class="fas fa-bars"></i>
+            </div>
+            <div class="nav-links" id="nav-links">
+                <a href="#">Nyumbani</a>
+                <a href="#">Gallery</a>
+                <a href="#logoFormSection">Tengeneza Logo</a>
+            </div>
+        </nav>
+
+        <!-- Dynamic Background Slides -->
+        <div id="dynamic-background">
+            <div class="slide-wrapper">
+                <img src="image_logo2.jpg" alt="Logo 1" class="slide-item active" data-type="image">
+                <video muted loop class="slide-item" data-type="video">
+                    <source src="video_slide1.mp4" type="video/mp4">
+                </video>
+                <img src="image_logo1.jpg" alt="Logo 2" class="slide-item" data-type="image">
+                <video muted loop class="slide-item" data-type="video">
+                    <source src="video_slide2.mp4" type="video/mp4">
+                </video>
+            </div>
+        </div>
+
+        <!-- Hero Content -->
+        <div class="hero-overlay">
+            <h1>Buni Brand Yako. Papo Hapo.</h1>
+            <p>Jenereta ya Logo inayoendeshwa na AI ya Gemini. Ubunifu, Haraka, na wa Kisasa.</p>
+            <a href="#logoFormSection" id="cta-button">
+                ANZA KUTENGENEZA LOGO YAKO 🚀
+            </a>
+        </div>
+    </div>
+
+    <!-- Your Logo Form Section Here -->
+   <section id="logoFormSection" style="padding: 5rem 1rem; min-height: 100vh; background: linear-gradient(to bottom, #0f0f1a, #1a1a2e);">
+    <div class="container">
+        <div class="form-wrapper">
+            <h2 class="form-title">Tengeneza Logo Yako kwa AI <span class="gradient-text">Papo Hapo</span></h2>
+            <p class="form-subtitle">Jaza taarifa hapa chini, Gemini itakutengenezea logo ya kipekee mara moja!</p>
+
+            <form id="logoForm" class="logo-form">
+                <!-- Taarifa za Msingi -->
+                <div class="form-grid">
+                    <div class="input-group">
+                        <label>Jina la Brand/Logo <span class="required">*</span></label>
+                        <input type="text" id="logoName" required placeholder="Mfano: Kilimo Kwanza" />
+                    </div>
+
+                    <div class="input-group">
+                        <label>Slogan (Si lazima)</label>
+                        <input type="text" id="slogan" placeholder="Mfano: Kulima ni Kujitegemea" />
+                    </div>
+
+                    <div class="input-group">
+                        <label>Sekta ya Biashara <span class="required">*</span></label>
+                        <select id="industry" required >
+                            <option value="" >Chagua sekta...</option>
+                            <option value="tech">Teknolojia</option>
+                            <option value="food">Chakula & Vinywaji</option>
+                            <option value="education">Elimu</option>
+                            <option value="health">Afya</option>
+                            <option value="finance">Fedha</option>
+                            <option value="fashion">Mitindo & Nguo</option>
+                            <option value="realestate">Mali isiyohamishika</option>
+                            <option value="other">Nyingine</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Mtindo wa Logo -->
+                <div class="input-group">
+                    <label>Mtindo wa Logo</label>
+                    <div class="style-options">
+                        <button type="button" class="style-btn active" data-style="minimalist">Minimalist</button>
+                        <button type="button" class="style-btn" data-style="modern">Modern</button>
+                        <button type="button" class="style-btn" data-style="vintage">Vintage</button>
+                        <button type="button" class="style-btn" data-style="flat">Flat</button>
+                        <button type="button" class="style-btn" data-style="3d">3D</button>
+                        <button type="button" class="style-btn" data-style="abstract">Abstract</button>
+                    </div>
+                </div>
+
+                <!-- Umbo & Ikoni -->
+                <div class="form-grid">
+                    <div class="input-group">
+                        <label>Umbo Kuu</label>
+                        <select id="shape">
+                            <option value="free">Huru / Organic</option>
+                            <option value="circle">Duara</option>
+                            <option value="square">Mraba</option>
+                            <option value="shield">Ngao / Shield</option>
+                            <option value="badge">Badge</option>
+                        </select>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Ikoni au Alama Unayotaka</label>
+                        <textarea id="symbol" rows="3" placeholder="Eleza unachotaka... Mfano: Nyota inayong'aa, mti unaokua, nembo ya simba..."></textarea>
+                    </div>
+                </div>
+
+                <!-- Rangi -->
+                <div class="form-grid color-grid">
+                    <div class="input-group">
+                        <label>Rangi Kuu</label>
+                        <input type="color" id="primaryColor" value="#00d4ff">
+                        <div class="color-preview" id="primaryPreview">#00d4ff</div>
+                    </div>
+                    <div class="input-group">
+                        <label>Rangi ya Background</label>
+                        <input type="color" id="bgColor" value="#0f0f1a">
+                        <div class="color-preview" id="bgPreview">#0f0f1a</div>
+                    </div>
+                </div>
+
+                <button type="submit" id="generateBtn" class="generate-btn">
+                    <span class="btn-text">Tengeneza Logo Yangu Sasa</span>
+                    <span class="btn-icon">✨</span>
+                </button>
+            </form>
+
+            <!-- Matokeo -->
+            <div id="logoResult" class="result-area" style="display:none;">
+                <h3>Logo Yako Imetengenezwa! 🎉</h3>
+                <div id="svgContainer">
+                    <div class="placeholder">Logo itaonekana hapa...</div>
+                </div>
+                <div class="result-actions">
+                    <button id="regenerateBtn" class="secondary-btn">Tengeneza Tena</button>
+                    <button id="downloadBtn" class="primary-btn">Download SVG + PNG</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- PROFESSIONAL FOOTER -->
+<footer class="site-footer">
+    <div class="container">
+        <div class="footer-grid">
+
+            <!-- Brand & Description -->
+            <div class="footer-col brand-col">
+                <h3 class="footer-logo">MX<span class="gradient-text">logo</span></h3>
+                <p>Jenereta ya Logo inayoendeshwa na Gemini. Tengeneza logo ya kitaalamu papo hapo bila gharama kubwa.</p>
+                
+                <!-- Newsletter Subscription -->
+                <div class="newsletter">
+                    <p><strong>Jisajili kwa Vidokezo vya Branding</strong></p>
+                    <form class="newsletter-form" onsubmit="event.preventDefault(); alert('Asante! Umefanikiwa kujiunga.');">
+                        <input type="email" placeholder="Ingiza barua pepe yako" required />
+                        <button type="submit">Jisajili</button>
+                    </form>
+                    <small>Tunatuma vidokezo mara moja kwa wiki. Hapana spam.</small>
+                </div>
+            </div>
+
+            <!-- Quick Links -->
+            <div class="footer-col">
+                <h4>Links za Haraka</h4>
+                <ul>
+                    <li><a href="#">Nyumbani</a></li>
+                    <li><a href="#">Gallery ya Logo</a></li>
+                    <li><a href="#">Bei & Mipango</a></li>
+                    <li><a href="#">Blogu</a></li>
+                    <li><a href="#">Msaada</a></li>
+                </ul>
+            </div>
+
+            <!-- Company -->
+            <div class="footer-col">
+                <h4>Kampuni</h4>
+                <ul>
+                    <li><a href="#">Kuhusu Sisi</a></li>
+                    <li><a href="#">Timu Yetu</a></li>
+                    <li><a href="#">Kazi (Careers)</a></li>
+                    <li><a href="#">Wasiliana Nasi</a></li>
+                    <li><a href="#">API kwa Waprogramu</a></li>
+                </ul>
+            </div>
+
+            <!-- Legal -->
+            <div class="footer-col">
+                <h4>Sheria na Masharti</h4>
+                <ul>
+                    <li><a href="#">Sera ya Faragha</a></li>
+                    <li><a href="#">Sheria na Masharti</a></li>
+                    <li><a href="#">Refund Policy</a></li>
+                    <li><a href="#">Leseni za Logo</a></li>
+                </ul>
+            </div>
+
+        </div>
+
+        <!-- Bottom Bar -->
+        <div class="footer-bottom">
+            <div class="social-links">
+                <a href="https://x.com/yourhandle" target="_blank" aria-label="X (Twitter)"><i class="fab fa-x-twitter"></i></a>
+                <a href="https://instagram.com/yourhandle" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                <a href="https://tiktok.com/@yourhandle" target="_blank" aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
+                <a href="https://youtube.com/@yourhandle" target="_blank" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+                <a href="https://linkedin.com/company/yourhandle" target="_blank" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+            </div>
+
+            <div class="copyright">
+                © 2025 <strong>MXlogo </strong> • Imetengenezwa kwa upendo Tanzania 
+                <span class="heart">❤️</span> na <a href="https://x.com/yourname" target="_blank">@maxter_hub</a>
+            </div>
+        </div>
+    </div>
+</footer>
+
+
+
+    <script>
+        // Navbar Scroll Effect
+        window.addEventListener('scroll', () => {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Mobile Menu Toggle
+        const mobileMenu = document.getElementById('mobile-menu');
+        const navLinks = document.getElementById('nav-links');
+
+        mobileMenu.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+            const icon = mobileMenu.querySelector('i');
+            icon.classList.toggle('fa-bars');
+            icon.classList.toggle('fa-times');
+        });
+
+        // Dynamic Slideshow
+        document.addEventListener('DOMContentLoaded', () => {
+            const slides = document.querySelectorAll('.slide-item');
+            let current = 0;
+            const interval = 8000;
+
+            function showNext() {
+                // Pause previous video
+                if (slides[current].tagName === 'VIDEO') {
+                    slides[current].pause();
+                    slides[current].currentTime = 0;
+                }
+
+                slides[current].classList.remove('active');
+                current = (current + 1) % slides.length;
+                slides[current].classList.add('active');
+
+                // Play new video if it's a video
+                if (slides[current].tagName === 'VIDEO') {
+                    slides[current].play().catch(() => {});
+                }
+            }
+
+            setInterval(showNext, interval);
+        });
+
+        // Smooth Scroll for CTA
+        document.getElementById('cta-button').addEventListener('click', (e) => {
+            e.preventDefault();
+            document.querySelector('#logoFormSection').scrollIntoView({
+                behavior: 'smooth'
+            });
+        });
+    </script>
+</body>
+</html>
